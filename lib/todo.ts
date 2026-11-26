@@ -38,20 +38,20 @@ function normDate(value: string): string {
   return trimmed;
 }
 
-export function normalizeRows(payload: unknown): TodoTask[] {
-  if (!payload || typeof payload !== 'object') return [];
+function findRows(payload: unknown, depth = 0): unknown[] | null {
+  if (!payload || typeof payload !== 'object' || depth > 4) return null;
   const obj = payload as Record<string, unknown>;
-  let rows: unknown = obj.rows;
-  if (!Array.isArray(rows)) {
-    const candidates = [obj.output, obj.result, obj.data, obj.response];
-    for (const nested of candidates) {
-      if (nested && typeof nested === 'object' && Array.isArray((nested as Record<string, unknown>).rows)) {
-        rows = (nested as Record<string, unknown>).rows;
-        break;
-      }
-    }
+  if (Array.isArray(obj.rows)) return obj.rows;
+  for (const key of ['output', 'result', 'data', 'response']) {
+    const found = findRows(obj[key], depth + 1);
+    if (found) return found;
   }
-  if (!Array.isArray(rows)) return [];
+  return null;
+}
+
+export function normalizeRows(payload: unknown): TodoTask[] {
+  const rows = findRows(payload);
+  if (!rows) return [];
 
   const tasks: TodoTask[] = [];
   for (const row of rows) {
