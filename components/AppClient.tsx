@@ -15,8 +15,8 @@ async function callTodo(body: TodoApiRequest): Promise<unknown> {
   const res = await fetch('/api/todo', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    // Arena v2 expects `{ input: { action, ... } }`. Proxy also normalizes this.
-    body: JSON.stringify({ input: body }),
+    // CRUD contract: { action, rowId?, data? }. Proxy wraps as Arena { input: ... }.
+    body: JSON.stringify(body),
   });
   if (!res.ok) {
     throw new Error(`Request failed with status ${res.status}`);
