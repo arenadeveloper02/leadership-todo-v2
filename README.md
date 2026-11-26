@@ -22,7 +22,7 @@ A polished, mobile-first task tracker for Position2 leadership with an iOS-nativ
 
 ```bash
 npm install
-cp .env.example .env   # fill in ARENA_API_KEY (and DATABASE_URL for Prisma)
+cp .env.example .env   # fill in ARENA_API_KEY, SIM_USER_EMAIL (and DATABASE_URL for Prisma)
 npm run dev
 ```
 
@@ -30,10 +30,11 @@ npm run dev
 
 | Variable | Description |
 | --- | --- |
-| `ARENA_WORKFLOW_URL` | Arena workflow execute endpoint (has a sensible default) |
-| `ARENA_API_KEY` | Bearer token for the workflow — **server-side only** |
+| `ARENA_WORKFLOW_URL` | Arena v2 workflow execute endpoint (has a sensible default) |
+| `ARENA_API_KEY` | API key for the workflow (`X-API-Key`) — **server-side only** |
+| `SIM_USER_EMAIL` | Sim user email sent as `X-Sim-Email` — **server-side only** |
 | `DATABASE_URL` | Neon Postgres connection string (injected by Vercel when Neon is connected) |
 
 ## Deploy
 
-Deploy to Vercel. Set `ARENA_API_KEY` (and optionally `ARENA_WORKFLOW_URL`) in project environment variables. Connect Neon so `DATABASE_URL` is injected; the build runs `prisma generate && prisma db push && next build`.
+Deploy to Vercel. Set `ARENA_API_KEY`, `SIM_USER_EMAIL`, and `ARENA_WORKFLOW_URL` (v2 path) in project environment variables. Connect Neon so `DATABASE_URL` is injected; the build runs `prisma generate && prisma db push && next build`.

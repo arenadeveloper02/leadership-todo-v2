@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 
 const DEFAULT_WORKFLOW_URL =
-  'https://agent.thearena.ai/api/workflows/3f3f2f7c-2ade-41b0-b4ec-09a855d50638/execute';
+  'https://agent.thearena.ai/api/v2/workflows/3f3f2f7c-2ade-41b0-b4ec-09a855d50638/execute';
 
 export async function POST(request: Request): Promise<NextResponse> {
   let body: unknown;
@@ -36,7 +36,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         'X-Sim-Email': simEmail,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ input: body }),
       cache: 'no-store',
     });
 
