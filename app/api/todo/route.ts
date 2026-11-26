@@ -14,8 +14,16 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 
   const apiKey = process.env.ARENA_API_KEY;
+  const simEmail = process.env.SIM_USER_EMAIL;
   if (!apiKey) {
     return NextResponse.json({ error: 'ARENA_API_KEY is not configured on the server' }, { status: 500 });
+  }
+
+  if (!simEmail) {
+    return NextResponse.json(
+      { error: 'SIM_USER_EMAIL is not configured on the server' },
+      { status: 500 }
+    );
   }
 
   const url = process.env.ARENA_WORKFLOW_URL ?? DEFAULT_WORKFLOW_URL;
@@ -24,7 +32,8 @@ export async function POST(request: Request): Promise<NextResponse> {
     const upstream = await fetch(url, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        'X-API-Key': apiKey,
+        'X-Sim-Email': simEmail,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
